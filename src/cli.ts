@@ -1,5 +1,6 @@
 import "source-map-support/register"; // registering node-source-map-support for typescript stack traces
 import { Command } from "commander";
+import * as fs from "fs-extra";
 import { HAPStorage } from "hap-nodejs";
 import { satisfies } from "semver";
 import { Logger } from "./logger";
@@ -65,6 +66,9 @@ export = function cli(): void {
   if (customStoragePath) {
     User.setStoragePath(customStoragePath);
   }
+
+  // Ensure the storage path exists before proceeding
+  fs.ensureDirSync(User.storagePath());
 
   // Initialize HAP-NodeJS with a custom persist directory
   HAPStorage.setCustomStoragePath(User.persistPath());
